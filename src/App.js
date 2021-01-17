@@ -1,23 +1,34 @@
+import { useEffect, useState } from 'react'
 import logo from './logo.svg';
 import './App.css';
+import { AudioEngine } from './audio'
+
 
 function App() {
+  const [audioEngine, setAudioEngine] = useState(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  useEffect(() => {
+    setAudioEngine(new AudioEngine())
+  }, [])
+
+  const togglePlay = e => {
+    if (isPlaying) {
+      setIsPlaying(false)
+      audioEngine.stop()
+    } else {
+      setIsPlaying(true)
+      audioEngine.play()
+    }
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {
+        audioEngine === null 
+          ? null
+          : <button onClick={togglePlay}>{ isPlaying ? 'stop' : 'play'}</button>
+      }
     </div>
   );
 }
