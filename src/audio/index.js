@@ -2,21 +2,27 @@ import { audioContext } from '../context/audio'
 
 export class AudioEngine {
     constructor() { 
-        this.osc = null
+        
+        
     }
 
     play() {
-        this.osc = audioContext.createOscillator()
-        this.osc.type = 'sine'
-        this.osc.frequency.value = 440.1
-        this.osc.connect(audioContext.destination)
+        this.freqs = [220.0, 275.0]
+        this.oscs = new Array(this.freqs.length)
+        for(var i = 0; i < this.freqs.length; i++){
+            this.oscs[i] = audioContext.createOscillator()
+            this.oscs[i].type = 'sine'
+            this.oscs[i].frequency.value = this.freqs[i]
+            this.oscs[i].connect(audioContext.destination)
+            this.oscs[i].start()
+         }
 
-        this.osc.start()
+
     }
 
     stop() {
-        if (this.osc === null) return
-        
-        this.osc.stop()
+        for(var i = 0; i < this.oscs.length; i++){
+            this.oscs[i].stop()
+        }
     }
 }
