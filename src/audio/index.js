@@ -10,13 +10,13 @@ export class AudioEngine {
         // clipping/distortion.
         //
         // try messing around with different gain values!
+        this.freqs = [2,3,4,5,6,7,8,9,10].map(x => x*50)
         this.gain = audioContext.createGain()
-        this.gain.gain.value = 0.5
+        this.gain.gain.value = 1.0 / this.freqs.length
         this.gain.connect(audioContext.destination)
     }
 
     play() {                
-        this.freqs = [800.0, 440.0]
         this.oscs = new Array(this.freqs.length)
         for(var i = 0; i < this.freqs.length; i++){
             this.oscs[i] = audioContext.createOscillator()
@@ -24,7 +24,9 @@ export class AudioEngine {
             this.oscs[i].frequency.value = this.freqs[i]
             this.oscs[i].connect(this.gain)
             
-            this.oscs[i].start()
+            //starts oscillators at random time within first 50ms, but only works first time!!?!
+            this.oscs[i].start(Math.random()/20)
+            
          }
 
 
