@@ -10,20 +10,22 @@ export class AudioEngine {
         // clipping/distortion.
         //
         // try messing around with different gain values!
-        this.fund = 256 // sets frequency of first oscillator
-        //this.freqs = [ 4, 5, 6,7, 8, 10, 12,14, 16, 20, 24,28, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256] //frequency ratios
-        //this.freqs = [...Array(128)].map((_, i) => 1 + i ) //all da harmonix babbyyy
-        this.freqs  = [4, 5, 6, 7, 8, 9]
-        this.freqs = this.freqs.map(x => x*this.fund/this.freqs[0]) //absolute frequencies
-
-
-        this.gainvals = this.freqs.map(f => Math.pow(f,-0.5)) //sets individual gains f^n
         this.gain = audioContext.createGain()
-        this.gain.gain.value = 1 / this.gainvals.reduce((a,b) => a+b) //sets master gain to a/(sum of individual)
         this.gain.connect(audioContext.destination)
     }
 
-    play() {                
+    play() {             
+        this.freqmin = 40
+        this.freqmax = 2048  
+
+        //selects frequencies uniformly on log scale 
+        //this.freqs = Array(200).fill().map(() => Math.pow(Math.E,Math.random()*(Math.log(this.freqmax)-Math.log(this.freqmin))+Math.log(this.freqmin))) //absolute frequencies
+        
+        //selects frequecys uniformly on linear scale
+        this.freqs = Array(200).fill().map(() => Math.random()*(this.freqmax-this.freqmin)+this.freqmin) //absolute frequencies
+        
+        this.gainvals = this.freqs.map(f => Math.pow(f,-0.5)) //sets individual gains f^n
+        this.gain.gain.value = 1 / this.gainvals.reduce((a,b) => a+b) //sets master gain to a/(sum of individual)
         this.oscs = new Array(this.freqs.length)
         this.gainz = new Array(this.freqs.length)
         for(var i = 0; i < this.freqs.length; i++){
@@ -36,8 +38,8 @@ export class AudioEngine {
             this.gainz[i].connect(this.gain)
             
             //starts oscillators at random time
-            this.spread = 0 //size of phase randomization window in ms
-            this.delay = 1/8 //time between successive notes in s
+            this.spread = 100 //size of phase randomization window in ms
+            this.delay = 0.0 //time between successive notes in s
             this.oscs[i].start(audioContext.currentTime + Math.random()*this.spread/1000.0 + this.delay*i)
             
          }
