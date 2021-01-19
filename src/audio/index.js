@@ -10,25 +10,32 @@ export class AudioEngine {
         // clipping/distortion.
         //
         // try messing around with different gain values!
-        this.fund = 190
-        this.delay = 0.25
-        this.freqs = [2,3,4,5,6,7,8,9,10,11,12,13]
-        this.freqs = this.freqs.map(x => x*this.fund/this.freqs[0])
+        this.fund = 56 // sets frequency of first oscillator
+        this.freqs = [1,2,3,4,5,6,7,8] //frequency ratios
+        this.freqs = this.freqs.map(x => x*this.fund/this.freqs[0]) //absolute frequencies
+
+
+        this.gainvals = this.freqs.map(x => 1 / x) //sets individual gains 1/f
         this.gain = audioContext.createGain()
-        this.gain.gain.value = 1.0 / this.freqs.length
+        this.gain.gain.value = 0.8 / this.gainvals.reduce((a,b) => a+b) //sets master gain to a/(sum of individual)
         this.gain.connect(audioContext.destination)
     }
 
     play() {                
         this.oscs = new Array(this.freqs.length)
+        this.gainz = new Array(this.freqs.length)
         for(var i = 0; i < this.freqs.length; i++){
             this.oscs[i] = audioContext.createOscillator()
+            this.gainz[i] = audioContext.createGain()
             this.oscs[i].type = 'sine'
             this.oscs[i].frequency.value = this.freqs[i]
-            this.oscs[i].connect(this.gain)
+            this.gainz[i].gain.value = this.gainvals[i]
+            this.oscs[i].connect(this.gainz[i])
+            this.gainz[i].connect(this.gain)
             
             //starts oscillators at random time
-            this.spread = 20 //start window in ms
+            this.spread = 50 //size of phase randomization window in ms
+            this.delay = 0.0 //time between successive notes in s
             this.oscs[i].start(audioContext.currentTime + Math.random()*this.spread/1000 + this.delay*i)
             
          }
