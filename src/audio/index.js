@@ -19,12 +19,12 @@ export class AudioEngine {
         this.freqmax = 2048  
 
         //selects frequencies uniformly on log scale 
-        //this.freqs = Array(200).fill().map(() => Math.pow(Math.E,Math.random()*(Math.log(this.freqmax)-Math.log(this.freqmin))+Math.log(this.freqmin))) //absolute frequencies
+        this.freqs = Array(200).fill().map(() => Math.pow(Math.E,Math.random()*(Math.log(this.freqmax)-Math.log(this.freqmin))+Math.log(this.freqmin))) //absolute frequencies
         
         //selects frequecys uniformly on linear scale
-        this.freqs = Array(200).fill().map(() => Math.random()*(this.freqmax-this.freqmin)+this.freqmin) //absolute frequencies
+        //this.freqs = Array(200).fill().map(() => Math.random()*(this.freqmax-this.freqmin)+this.freqmin) //absolute frequencies
         
-        this.gainvals = this.freqs.map(f => Math.pow(f,-0.5)) //sets individual gains f^n
+        this.gainvals = this.freqs.map(f => Math.pow(f,-2)) //sets individual gains f^n
         this.gain.gain.value = 1 / this.gainvals.reduce((a,b) => a+b) //sets master gain to a/(sum of individual)
         this.oscs = new Array(this.freqs.length)
         this.gainz = new Array(this.freqs.length)
