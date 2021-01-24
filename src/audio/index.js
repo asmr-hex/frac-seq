@@ -8,7 +8,7 @@ export class AudioEngine {
         // fact that their amplitudes are summed and sometimes above 1 and below -1.
         // but if we reduce the overall amplitude (with a gain node), we won't experience
         // clipping/distortion.
-        //
+        //ja;sdlkjdsa;f
         // try messing around with different gain values!
         this.fund = 256 // sets frequency of first oscillator
         //this.freqs = [ 4, 5, 6,7, 8, 10, 12,14, 16, 20, 24,28, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256] //frequency ratios
@@ -51,3 +51,13 @@ export class AudioEngine {
         }
     }
 }
+
+/* 
+const choose = (choices, cdf) =>
+  choices[cdf.filter(c => c <= Math.random() * cdf[cdf.length - 1]).length]
+
+const choices = [440, 550, 660, 840]
+const pdf = [ 0.1, 0.5, 0.3, 0.1 ]
+
+const cdf = pdf.map(p => (acc = p + acc))
+choose(choices, cdf) // output a frequencey (from the choices Array) according to the pdf provided */
