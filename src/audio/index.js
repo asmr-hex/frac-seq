@@ -1,7 +1,14 @@
+import { range } from 'lodash'
+
 import { audioContext } from '../context/audio'
 
 export class AudioEngine {
     constructor() { 
+
+
+        const m = range(-2,2).map(d0 => range(-2,2).map(d1 => range(-2,2).map(d2 => range(-2,2).map(d3 => Math.pow(2,d0)*Math.pow(3,d1)*Math.pow(5,d2)*Math.pow(7,d3)))))
+
+        
         // ADDED A GAIN NODE.
         // its important to reduce the gain of the output of both oscillators
         // when the resulting signal is their superposition. this is due to the
