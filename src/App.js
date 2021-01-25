@@ -30,12 +30,19 @@ function App() {
 
   const convolve = () => {
     // make sure convolution size is a valid int
-    if (!!parseInt(convolutionSize)) return
+    //f (!parseInt(convolutionSize)) return
+    let _pattern = pattern
+    if (convolvedPattern.length !== 0) _pattern = convolvedPattern
 
     // TODO write some interesting convolution here.....
+    // use convolutionSize
+    let result = []
+    for (const step of _pattern) {
+      result = [...result, ...(step ? pattern : pattern.map(s => !s))]
+    }
 
     // set the convolution pattern
-    setConvolvedPattern(pattern)
+    setConvolvedPattern(result)
   }
 
   useEffect(() => {
@@ -55,7 +62,7 @@ function App() {
   return (
     <div className="App" style={style}>
       <Pattern pattern={pattern} setPattern={setPattern}/>
-      <input type="text" value={convolutionSize} onChange={e => setConvolutionSize(e.target.value)}/>
+      <input type="text" value={convolutionSize} onChange={ e => setConvolutionSize(e.target.value) }/>
       <button onClick={convolve}>convolve</button>
       <button onClick={togglePlay}>{ isPlaying ? 'stop' : 'play'}</button>
       <Pattern name="convolved-sequence" pattern={convolvedPattern} setPattern={setConvolvedPattern} noAddition={true}/>

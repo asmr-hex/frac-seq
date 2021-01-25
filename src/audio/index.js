@@ -17,7 +17,7 @@ export class AudioEngine {
         this.lookAheadInterval = 100 // ms
         this.scheduleAheadTime = 0.1 // s
         this.nextStepTime = 0 // ms
-        this.bpm = 120
+        this.bpm = 460
     }
 
     start() {
@@ -38,14 +38,13 @@ export class AudioEngine {
     scheduleStep(time) {
         // get current step
         const step = this.pattern[this.stepIndex]
-        if (step){
+        if (step) {
             const osc = audioContext.createOscillator()
             osc.type = 'sine'
-            osc.frequency.value = 440
+            osc.frequency.value = 500
             osc.connect(this.oscGain)
             osc.start(time)
             osc.stop(time + ((60.0 / this.bpm) * 0.9))
-    
         }
 
 
